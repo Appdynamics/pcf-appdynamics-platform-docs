@@ -3,9 +3,9 @@ title: Installing and Configuring AppDynamics
 owner: Partners
 ---
 
-<p class="note"><strong>Note:</strong> For instructions for installing AppDynamics v1.x, see <a href="./installing_1_x.html">(Deprecated) Installing and Configuring AppDynamics APM (1.x version)</a>.</p>
+<p class="note"><strong>Note:</strong> For instructions for installing AppDynamics v1.x, see <a href="./installing_1_x.html">(Deprecated) Installing and Configuring AppDynamics Platform Metrics (1.x version)</a>.</p>
 
-This topic describes how to install and configure Appdynamics APM monitoring in Pivotal Cloud Foundry (PCF).
+This topic describes how to install and configure Appdynamics Platform Metrics in Pivotal Cloud Foundry (PCF).
 
 
 ## <a id='before-you-start'></a> Before You Start
@@ -79,7 +79,7 @@ Do the following:
   * **SSL Port** -- Do not enable.
     ![](./images/install-03-controller-config-options.png)
 
-1. You can add multiple controller configurations by repeating steps 4 and 5. This will enable applications to bind to 
+1. You can add multiple controller configurations by repeating steps 4 and 5. This will enable applications to bind to
 any of the entered configurations.
 
 1. Click **Save** to save the changes and return to the Installation Dashboard.
@@ -100,7 +100,7 @@ any of the entered configurations.
   * **Password**: Password for the above AppDynamics user account.
   * **Nozzle Certificate Authority**: set it to **reverselogproxy**. Do not set it to anything other than **reverselogproxy**.
   ![](./images/machine-agent-2.png)
-    
+
 1. Click **Save** to save the changes and return to the Installation Dashboard.
 
 1. In the Installation Dashboard, click **Apply Changes** and wait for all the changes to get applied.
@@ -109,15 +109,15 @@ any of the entered configurations.
 ## <a id='SSL'></a> Configuring SSL
 
 ### <a id='SAAS'></a> SSL for SAAS AppDyanmics Controllers
-  
-AppDynamics SAAS controller use DigiCert Global Root CA. The tile automatically imports the DigiCert Global Root CA into the keystore used by AppDynamics Machine agent and the dashboard application, if present. 
-  
-Check the SSL checkbox in AppDynamics Machine agent configuration. 
+
+AppDynamics SAAS controller use DigiCert Global Root CA. The tile automatically imports the DigiCert Global Root CA into the keystore used by AppDynamics Machine agent and the dashboard application, if present.
+
+Check the SSL checkbox in AppDynamics Machine agent configuration.
 
 ### <a id='OnPrem'></a> SSL for OnPremise AppDyanmics Controllers
-  
-For OnPremise Controller deployments, upload the root certificate for the internal CA that signed the Controller certificate for your OnPremise Controller in the secutiry configuration of the OpsManager Director. 
-  
+
+For OnPremise Controller deployments, upload the root certificate for the internal CA that signed the Controller certificate for your OnPremise Controller in the secutiry configuration of the OpsManager Director.
+
 For an example, see the [Security Page](https://docs.pivotal.io/pivotalcf/2-0/customizing/vsphere-config.html#security-config) section of the _Configuring Ops Manager Director on vSphere_ topic in the PCF documentation.
 
 Make sure to follow the exact format below while entering multiple certificates.
