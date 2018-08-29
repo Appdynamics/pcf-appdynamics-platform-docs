@@ -1,0 +1,21 @@
+---
+:archive_menu:
+  ".": 
+:production_host: hello
+:subnav_templates:
+  appdynamics: appdynamics_subnav
+:template_variables: 
+:local_repo_dir: "/Users/pavan.krishna/appdy/docs-appdynamics-apm"
+:workspace: !ruby/object:Pathname
+  path: "/Users/pavan.krishna/appdy/docs-appdynamics-apm/docs-book/output/master_middleman/source"
+:feedback_enabled: 
+:repo_link_enabled: true
+:repo_links:
+  appdynamics:
+    repo: docs-content
+    ref: master
+    at_path: 
+:product_info:
+  appdynamics: {}
+:elastic_search: false
+:proof: false
