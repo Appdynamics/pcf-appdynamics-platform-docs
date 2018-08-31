@@ -1,12 +1,12 @@
 ---
-title: Installing and Configuring AppDynamics
+title: Installing and Configuring AppDynamics Platform Monitoring
 owner: Partners
 ---
 
-<p class="note"><strong>Note:</strong> For instructions for installing AppDynamics v1.x, see <a href="./installing_1_x.html">(Deprecated) Installing and Configuring AppDynamics Platform Metrics (1.x version)</a>.</p>
-
 This topic describes how to install and configure Appdynamics Platform Metrics in Pivotal Cloud Foundry (PCF).
+## <a id='overview-appd-nozzle'></a> Overview
 
+AppDynamics Nozzle aggregates and forwards logs and metrics from the Loggregator Firehose to the AppDynamics Controller. The Controller process that data and provides the performance metrics of the underlying infrastructure of apps running on PCF in the Metric Browser corresponding to the Nozzle application. When you successfully configure AppDynamics Nozzle on PCF, a default application, appd-nozzle, is created on the AppDynamics Controller. The default tier created is appd-nozzle-tier and the node is appd-nozzle-node under which corresponding metrics are recorded.
 
 ## <a id='before-you-start'></a> Before You Start
 
@@ -17,129 +17,158 @@ Do the following:
 1. [Set up the AppDynamics Controller](#set-up-appd-controller).
 
 
-## <a id='set-up-appd-controller'></a> Set Up the AppDynamics Controller
+## <a id='set-up-appd-nozzle'></a> Set Up the AppDynamics Nozzle Configuration
 
-Do the following:
+1. Log in to the Ops Manager.
 
-1. [Define an Application and Tier in the Controller](#define-app-and-tier).
+1. If the AppDynamics Platform Monitoring tile does not appear in the Installation Dashboard, click **Import a Product** in the left-side menu and import the AppDynamics Platform Monitoring tile.
 
-1. [Determine the Tier ID](#determine-app-id).
+1. Double-click the **AppDynamics Platform Monitoring for PCF** tile in the Installation Dashboard.
+   The Settings tab is displayed.
 
-### <a id='define-app-and-tier'></a> Define an Application and Tier in the Controller
+1. In the **Settings** tab, select **AppDynamics Nozzle Configuration**.
+![](./images/appd-nozzle-config.png)
 
-1. Log in to the Controller.
+1. Specify the following Nozzle configuration settings and click **Save**. All the fields are mandatory. You cannot add multiple Nozzle configurations.
 
-1. Go to the Applications page. At the top of the table, click **Create Application**.
-  ![](./images/appd-create-app-01.png)
+  * **UAA token_endpoint URL**: The authentication token endpoint URL of the User Account and Authentication Service (UAA) API. If cf is installed on the host, run the following to find the token URL:
 
-1. In the Create Application dialog box, click **Create an Application manually**, enter the application name, and click **OK**.<br>
-  ![](./images/appd-create-app-02.png)
+    ```(master)$ cf curl /v2/info | grep doppler_logging_endpoint
+    "wss://doppler.sys.pie-20.cfplatformeng.com:443" ```
 
-1. In the Application Dashboard for the new app, go to **Tiers & Nodes**.
+  * **Doppler Traffic Controller URL**: The doppler firehose endpoint. Run the following to find find the URL:
 
-1. Click the Actions button at the top of the table and choose **Create App Server Tier**.
-  ![](./images/appd-create-app-03.png)
+    ```(master)$ cf curl /v2/info | jq .token_endpoint
+   "https://uaa.sys.pie-multi-az-blue.cfplatformeng.com"```
 
-1. Select the application type and click **Next**.
-  ![](./images/appd-create-app-04.png)
+  * **Username**: Username for a member account of the firehose.doppler Group. This is the authorized UAA user that AppDynamics Nozzle uses to access the Loggregator. For more information, see [How to Find Credentials](https://github.com/Appdynamics/appdynamics-firehose-nozzle#how-to-find-credentials).
+  * **Password**: The password for the above account.
 
-1. Enter the tier name and description and click **Finish**.
-  ![](./images/appd-create-app-05.png)
-
-* Note the Application Name and Tier Name before proceeding. You will need this information when you set up the Service Broker tile.
-
-### <a id='determine-app-id'></a> Determine the Tier ID
-
-1. In the Tiers & Nodes table for the application you just created, right-click on the tier and choose **View**.
-
-1. Examine the page URL and look for the "component=<number>" string. This number is the tier ID.
-      ![](./images/appd-component-id.png)
-
-* Note the Tier ID before proceeding. You will need this information when you set up the Service Broker tile.
+    Do one of the following to get the credentials:
+      * If you have an account, log in to the OPS Manager and select the PAS tile. Navigate to credentials > UAA > Opentsdb Nozzle Credentials. Copy the username and password. CF environments usually ship the opentsdb-firehose-nozzle account which already belongs to the doppler.firehose group.
+      * If you don't have an account, create a new one in the doppler.firehose group with necessary permissions. For more information, see [UAA Client](https://github.com/cf-platform-eng/firehose-nozzle#option-2-uaa-client).
+  * **Controller Account Name**: The name of the account in the AppDynamics Controller. Access the account name in the AppDynamics Controller UI on the Account tab under License.
+  * **Account Access Key**: The access key for the above Controller account. Access the account key in the AppDynamics Controller UI on the Account tab under License.
+  * **Controller Host**: Hostname of the AppDynamics Controller.
+  * **Controller Port**: The port on which the AppDynamics Controller listens for Nozzle traffic.
+  * **Enable Controller SSL**: Establishes secures communication with the Controller.
+  * **Username for Reporting Custom Dashboard**: Username of an account with custom dashboard creation permissions.
+  * **Password**: Password for the above Account.
 
 
-## <a id='set-up-the-service-broker-tile'></a> Set Up the Service Broker Tile
+## <a id='overide-nozzle'></a> Overriding Nozzle Configuration
+Although the nozzle application creates a default configuration on the AppDynamics Controller by itself, you can override it by changing the settings by using either the Ops Manager or by pushing the environment variables using the CF CLI tool.
+### <a id='overide-nozzle-ops-manager'></a> Using the Ops Manager
 
-1. Log in to Ops Manager.
+1. In the **Advanced Configuration (Optional for 4.5.x Controllers)** tab, specify the following settings and click **Save**.
+   ![](./images/nozzle-adv-config.png)
 
-1. If the AppDynamics Service Broker tile does not appear in the Installation Dashboard, click **Import a Product** in the left-side menu and import the AppDynamics tile.
+  * **Nozzle Application Name**: Enter a name to identify the Nozzle application on the Controller.
+  * **Nozzle Tier Name**: Enter the tier name for the Nozzle application you defined previously.
+  * **Nozzle Tier ID**: Enter the component ID you identified previously.
+  * **Nozzle Node Name**: Enter a name for the node that corresponds to the Application Name, such as **_app-name_-node**.
 
-1. Double-click the **AppDynamics** tile in the Installation Dashboard.
+1. In the Installation Dashboard, click **Apply Changes** and wait for all the changes to be applied.
 
-1. In the **Settings** tab, click **AppDynamics Controller Configuration**. Then click **Add**.
-  ![](./images/install-02-appd-controller-config-add.png)
+### <a id='overide-nozzle-cf'></a>Using CF CLI
 
-1. Enter the following Service Plan options. All of these fields are required. The [Java Agent configuration page](https://docs.appdynamics.com/display/LATEST/Java+Agent+Configuration+Properties) page includes descriptions for these options.
-  * **Controller Configuration Name**
-  * **Controller Configuration Description**
-  * **Account Name** -- This is the account name used to access the Controller
-  * **Account Access Key** -- In the Controller, click the gear icon  and choose **License > Account > Access Key**. If the Account Access Key includes one or more `$` characters, append a second `$` to every `$` included in the key string and surround the entire string with single quotes (').
-  * **Controller Host**
-  * **Controller Port**
-  * **SSL Port** -- Do not enable.
-    ![](./images/install-03-controller-config-options.png)
+If the CF command line tool installed in your enviorment, you can override the Default Nozzle configuration by setting the environment variables and restaging the application:
 
-1. You can add multiple controller configurations by repeating steps 4 and 5. This will enable applications to bind to
-any of the entered configurations.
+```cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
+   cf restage appdnozzle```
 
-1. Click **Save** to save the changes and return to the Installation Dashboard.
+The table below summarizes environment variables, their default and allowed values, and description.
 
-1. In the **Settings** tab, click **AppDynamics Machine Agent Configuration**.
-
-1. Enter the following options. All of these fields are required. The [Standalone Machine Agent Configuration Property Reference](https://docs.appdynamics.com/display/LATEST/Standalone+Machine+Agent+Configuration+Property+Reference) page includes descriptions for these options.
-  * **Account Name**: The account name used to access the Controller.
-  * **Account Access Key**: In the Controller, click the gear icon  and choose **License > Account > Access Key**. If the Account Access Key includes one or more `$` characters, append a second `$` to every `$` included in the key string and surround the entire string with single quotes (').
-  * **Controller Host**: Host name of the controller (e.g: 443-onprem-controller.e2e.appd-test.com:8090/controller).
-  * **Controller Port**: Port on which controller is listening (e.g: `8090`).
-  * **SSL Enabled**: Disabled by default. Enable this if you have SSL enabled on the controller. The controller port must be `443` if enabled.
-  * **Application Name**: Enter the application name you defined previously.
-  * **Tier Name**: Enter the application and tier names you defined previously.
-  * **Tier ID**: Enter the component ID you identified previously.
-  * **Node Name**: Enter a name that corresponds to the Application Name, such as **_app-name_-node**.
-  * **User Name**: Must be an AppDynamics user account that has permissions to create both custom metric dashboards and custom Health Rules in the target application.
-  * **Password**: Password for the above AppDynamics user account.
-  * **Nozzle Certificate Authority**: set it to **reverselogproxy**. Do not set it to anything other than **reverselogproxy**.
-  ![](./images/machine-agent-2.png)
-
-1. Click **Save** to save the changes and return to the Installation Dashboard.
-
-1. In the Installation Dashboard, click **Apply Changes** and wait for all the changes to get applied.
-
-
-## <a id='SSL'></a> Configuring SSL
-
-### <a id='SAAS'></a> SSL for SAAS AppDyanmics Controllers
-
-AppDynamics SAAS controller use DigiCert Global Root CA. The tile automatically imports the DigiCert Global Root CA into the keystore used by AppDynamics Machine agent and the dashboard application, if present.
-
-Check the SSL checkbox in AppDynamics Machine agent configuration.
-
-### <a id='OnPrem'></a> SSL for OnPremise AppDyanmics Controllers
-
-For OnPremise Controller deployments, upload the root certificate for the internal CA that signed the Controller certificate for your OnPremise Controller in the secutiry configuration of the OpsManager Director.
-
-For an example, see the [Security Page](https://docs.pivotal.io/pivotalcf/2-0/customizing/vsphere-config.html#security-config) section of the _Configuring Ops Manager Director on vSphere_ topic in the PCF documentation.
-
-Make sure to follow the exact format below while entering multiple certificates.
-
-  <pre class='terminal'>
-  -----BEGIN CERTIFICATE-----
-ABCDEFGH12345678ABCDEFGH12345678ABCDEFGH12345678AB
-EFGH12345678ABCDEFGH12345678ABCDEFGH12345678ABCDEF
-GH12345678ABCDEFGH12345678ABCDEFGH12345678...
-------END CERTIFICATE------
------BEGIN CERTIFICATE-----
-BCDEFGH12345678ABCDEFGH12345678ABCDEFGH12345678ABB
-EFGH12345678ABCDEFGH12345678ABCDEFGH12345678ABCDEF
-GH12345678ABCDEFGH12345678ABCDEFGH12345678...
-------END CERTIFICATE------
------BEGIN CERTIFICATE-----
-CDEFGH12345678ABCDEFGH12345678ABCDEFGH12345678ABBB
-EFGH12345678ABCDEFGH12345678ABCDEFGH12345678ABCDEF
-GH12345678ABCDEFGH12345678ABCDEFGH12345678...
-------END CERTIFICATE------
-</pre>
-
+<table class="nice">
+    <th>Environment Variable</th>
+    <th>Purpose</th>
+    <th>Allowed Values</th>
+    <th>Default</th>
+    <tr>
+        <td>APPD_NOZZLE_APP</td>
+        <td>Name of the Nozzle Application under which the metrics are recorded.</td>
+        <td>Any string</td>
+        <td>appd-nozzle</td>
+    </tr>
+    <tr>
+        <td>APPD_NOZZLE_TIER</td>
+        <td>Name of the Nozzle Tier under which the metrics are recorded</td>
+        <td>Any string</td>
+        <td>appd-nozzle-tier</td>
+    </tr>
+    <tr>
+      <td>APPD_NOZZLE_Node</td>
+      <td>Name of the Nozzle Node under which the metrics are recorded</td>
+      <td>Any string</td>
+      <td>appd-nozzle-node</td>
+    </tr>
+    <tr>
+        <td>APPD_SSL_ENABLED</td>
+        <td>Enable/Disable SSL to Controller</td>
+        <td>true / false</td>
+        <td>false</td>
+    </tr>
+    <tr>
+      <td>APPD_CONTROLLER_HOST</td>
+      <td>Hostname of the Appdynamics Controller</td>
+      <td>host.appd.com</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>APPD_CONTROLLER_PORT</td>
+      <td>Port on which Appdynamics Controller is listening</td>
+      <td>Any port number</td>
+      <td>8090</td>
+    </tr>
+    <tr>
+      <td>APPD_ACCOUNT</td>
+      <td>Account name for the above Controller</td>
+      <td>An Account name</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>APPD_ACCESS_KEY</td>
+      <td>Name of the Nozzle Node under which the metrics are recorded</td>
+      <td>Access Key</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>APPD_SINK</td>
+      <td>Sink to which the metrics are to be pushed.</td>
+      <td>stdout/Controller</td>
+      <td>Controller</td>
+    </tr>
+    <tr>
+      <td>APPD_SAMPLING_RATE</td>
+      <td>Polling Interval in secs to Firehose Nozzle.</td>
+      <td>number of seconds</td>
+      <td>2 seconds</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_UAA_URL</td>
+      <td>UAA API endpoint URL</td>
+      <td>Run cf curl /v2/info and record the UAA endpoint</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_TRAFFIC_CONTROLLER_URL</td>
+      <td>Doppler end point URL</td>
+      <td>Run cf curl /v2/info and record doppler api url</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_USERNAME</td>
+      <td>Name of the Nozzle Node under which the metrics are recorded</td>
+      <td>User name of account belonging to doppler.firehose group</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_PASSWORD</td>
+      <td>Password for the above account</td>
+      <td>none</td>
+      <td>none</td>
+    </tr>
+</table>
 
 ## <a id='troubleshooting'></a> Troubleshooting
 
