@@ -5,9 +5,8 @@ owner: Partners
 
 ## <a id='overview'></a> Overview
 
-The AppDynamics integration with Pivotal Cloud Foundry (PCF) allows you to easily collect infrastructure metrics of AppDynamics-monitored applications on the [Pivotal Network](http://network.pivotal.io).
-
-AppDynamics Platform Metrics supports performance monitoring of infrastructure metrics. AppDynamics Firehose Nozzle bundled with an application instruments the application code and publishes performance monitoring metrics and other details back to the Application Dashboard in the AppDynamics Controller web UI.
+AppDynamics Platfrom Metrics for PCF provides performance monitoring of the CloudFoundry platform. A Firehose Nozzle application to collect various  KPI metrics and
+a Dashboard Application that auotmatically creates healthrules and custom dashboard assocaited with the metrics is deployed as a part of this tile
 
 
 ## <a id='product-snapshot'></a> Product Snapshot
@@ -17,7 +16,7 @@ AppDynamics Platform Metrics supports performance monitoring of infrastructure m
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v4.5.442</td>
+        <td>v4.5.460</td>
     </tr>
     <tr>
         <td>Release date</td>
@@ -37,20 +36,14 @@ AppDynamics Platform Metrics supports performance monitoring of infrastructure m
     </tr>
     <tr>
         <td>Appdynamics Controller Version</td>
-        <td>4.5.x</td>
+        <td>4.5.x, 4.4.x</td>
     </tr>
 </table>
 
-### <a id="limitations"></a> Limitations
-
-* Upgrades from AppDynamics v1.x are not supported. If you previously installed AppDynamics v1.x, uninstall it and install the latest version.
-
-* The tile cannot be used for OpsManager with cf < v2.0.7 since the Loggregator component (reverse_log_proxy) needed
-for extracting the KPI metrics is not exposed.
 
 ### <a id="reqs"></a> Requirements
 
-* AppDynamics Controller v4.5.x
+* AppDynamics Controller v4.5.x, v4.4.x
 * An AppDynamics account
 * Pivotal Cloud Foundry v2.0.7 or higher
 
