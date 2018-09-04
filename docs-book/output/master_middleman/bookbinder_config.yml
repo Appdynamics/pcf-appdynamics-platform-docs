@@ -5,9 +5,9 @@
 :subnav_templates:
   appdynamics: appdynamics_subnav
 :template_variables: 
-:local_repo_dir: "/Users/pavan.krishna/appdy/docs-appdynamics-apm"
+:local_repo_dir: "/Users/pavan.krishna/appdy/pcf-appdynamics-platform-docs"
 :workspace: !ruby/object:Pathname
-  path: "/Users/pavan.krishna/appdy/docs-appdynamics-apm/docs-book/output/master_middleman/source"
+  path: "/Users/pavan.krishna/appdy/pcf-appdynamics-platform-docs/docs-book/output/master_middleman/source"
 :feedback_enabled: 
 :repo_link_enabled: true
 :repo_links:
