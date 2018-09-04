@@ -21,7 +21,7 @@ Do the following:
 1. Acquire atleast one Go SDK Agent License.
 
 
-## <a id='set-up-appd-nozzle'></a> Set Up the AppDynamics Nozzle Configuration
+## <a id='set-up-appd-nozzle'></a> Configuring AppDynamics Nozzle
 
 1. Log in to the Ops Manager.
 
@@ -67,12 +67,12 @@ Do the following:
   * **Username for Reporting Custom Dashboard**: Username of an account with custom dashboard creation permissions.
   * **Password**: Password for the above Account.
 
-### <a id='overide-nozzle-ops-manager'></a> AppDynamics Application Configuration
+### <a id='overide-nozzle-ops-manager'></a> Advanced Configuration of AppDynamics Application
 
-1. This is Optional for 4.5.x Controllers. The Application, Tier, Node name are created as `appd-nozzle`, `appd-nozzle-tier` and `appd-nozzle-node` respectively on the fly.
-This can be overriden by setting the below configuration. Note that the Application, Tier need not be precreated here. Just enter the names you want the metrics under.
+This configuration is optional for 4.5.x Controllers. The Application, Tier, Node name on the Controller are created as `appd-nozzle`, `appd-nozzle-tier`, and `appd-nozzle-node` respectively on the fly.
+This can be overriden by setting the below configuration. Note that the Application and Tier need not be precreated here. Just enter the names you want the metrics under.
 
-1. However, for 4.4.x this is still mandatory. You HAVE to pre-create the Application / Tier on AppDynamics Controller and enter the configuration. Note that the tier must be `Go SDK` tier
+However, for the 4.4.x Controllers, this setting is mandatory. You have to pre-create the Application and Tier on the AppDynamics Controller and enter the configuration. Note that the Tier must be `Go SDK` tier.
 
 
 1. In the **Advanced Configuration (Optional for 4.5.x Controllers)** tab, specify the following settings and click **Save**.
