@@ -6,7 +6,9 @@ owner: Partners
 This topic describes how to install and configure Appdynamics Platform Metrics in Pivotal Cloud Foundry (PCF).
 ## <a id='overview-appd-nozzle'></a> Overview
 
-AppDynamics Nozzle aggregates and forwards logs and metrics from the Loggregator Firehose to the AppDynamics Controller. The Controller process that data and provides the performance metrics of the underlying infrastructure of apps running on PCF in the Metric Browser corresponding to the Nozzle application. When you successfully configure AppDynamics Nozzle on PCF, a default application, appd-nozzle, is created on the AppDynamics Controller. The default tier created is appd-nozzle-tier and the node is appd-nozzle-node under which corresponding metrics are recorded.
+AppDynamics Nozzle aggregates and forwards logs and metrics from the Loggregator Firehose to the AppDynamics Controller. The Controller process that data and provides the performance metrics of the underlying infrastructure of apps running on PCF. You can view them in the Metric Browser corresponding to the Nozzle application.
+
+When you successfully configure AppDynamics Nozzle on PCF, a default application named appd-nozzle, is created on the AppDynamics Controller. Additionally, a default tier named appd-nozzle-tier and a default node named appd-nozzle-node are created under which corresponding metrics are recorded.
 
 ## <a id='before-you-start'></a> Before You Start
 
@@ -14,7 +16,9 @@ Do the following:
 
 1. Create a [Pivotal Network](https://network.pivotal.io) account if you do not have one.
 
-1. [Set up the AppDynamics Controller](#set-up-appd-controller).
+1. [Set up the AppDynamics Controller](https://docs.appdynamics.com/display/PRO45/Controller+Deployment).
+
+1. Acquire atleast one Go SDK Agent License.
 
 
 ## <a id='set-up-appd-nozzle'></a> Set Up the AppDynamics Nozzle Configuration
@@ -32,20 +36,20 @@ Do the following:
 1. Specify the following Nozzle configuration settings and click **Save**. All the fields are mandatory. You cannot add multiple Nozzle configurations.
 
   * **UAA token_endpoint URL**: The authentication token endpoint URL of the User Account and Authentication Service (UAA) API.
-  * **Doppler Traffic Controller URL**: The doppler firehose endpoint. 
-     
-    If cf is installed on the host, run the  cf command to `cf curl /v2/info`. The UAA token_endpoint and Doppler Traffic Controller URL are the value of `token_endpoint` and `doppler_logging_endpoint` respectively 
-    
+  * **Doppler Traffic Controller URL**: The doppler firehose endpoint.
+
+    If cf is installed on the host, run the  cf command to `cf curl /v2/info`. The UAA token_endpoint and Doppler Traffic Controller URL are the value of `token_endpoint` and `doppler_logging_endpoint` respectively
+
    ```
-      $ cf curl /v2/info 
+      $ cf curl /v2/info
       {
-        ... 
+        ...
          "token_endpoint": "https://uaa.sys.pie-multi-az-blue.cfplatformeng.com",
          ...
          "doppler_logging_endpoint": "wss://doppler.sys.pie-multi-az-blue.cfplatformeng.com:443",
       }
    ```
-   
+
 
 
 
@@ -63,7 +67,7 @@ Do the following:
   * **Username for Reporting Custom Dashboard**: Username of an account with custom dashboard creation permissions.
   * **Password**: Password for the above Account.
 
-### <a id='overide-nozzle-ops-manager'></a> AppDynamics Application Configuration 
+### <a id='overide-nozzle-ops-manager'></a> AppDynamics Application Configuration
 
 1. This is Optional for 4.5.x Controllers. The Application, Tier, Node name are created as `appd-nozzle`, `appd-nozzle-tier` and `appd-nozzle-node` respectively on the fly.
 This can be overriden by setting the below configuration. Note that the Application, Tier need not be precreated here. Just enter the names you want the metrics under.
@@ -79,4 +83,3 @@ This can be overriden by setting the below configuration. Note that the Applicat
   * **Nozzle Node Name**: Enter a name for the node that corresponds to the Application Name, such as **_app-name_-node**.
 
 1. In the Installation Dashboard, click **Apply Changes** and wait for all the changes to be applied.
-
