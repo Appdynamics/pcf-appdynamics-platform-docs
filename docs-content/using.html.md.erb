@@ -1,94 +1,110 @@
 ---
-title: Using AppDynamics
+title: Overriding Default Configuration
 owner: Partners
 ---
 
-This topic describes how to push and bind an application to an AppDynamics tile.
+### <a id='overide-nozzle-cf'></a>Overriding Default Nozzle Configuration
 
 
-## <a id='before-you-start'></a> Before You Start
+The Nozzle is shipped to work with basic configuration input using Tile forms. However, most of the configuration can be overriden. 
+If the CF command line tool installed in your enviorment, you can override the Default Nozzle configuration by setting the environment variables and restaging the application:
 
-1. Create a [Pivotal Network](https://network.pivotal.io) account if you do not have one.
+```cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
+   cf restage appdnozzle```
 
-1. Install the Cloud Foundry Command Line Interface (cf CLI). See [Installing the cf CLI](https://docs.pivotal.io/pivotalcf/2-1/cf-cli/install-go-cli.html).
+The table below summarizes environment variables, their default and allowed values, and description.
 
+<table class="nice">
+    <th>Environment Variable</th>
+    <th>Purpose</th>
+    <th>Allowed Values</th>
+    <th>Default</th>
+    <tr>
+        <td>APPD_NOZZLE_APP</td>
+        <td>Name of the Nozzle Application under which the metrics are recorded.</td>
+        <td>Any string</td>
+        <td>appd-nozzle</td>
+    </tr>
+    <tr>
+        <td>APPD_NOZZLE_TIER</td>
+        <td>Name of the Nozzle Tier under which the metrics are recorded</td>
+        <td>Any string</td>
+        <td>appd-nozzle-tier</td>
+    </tr>
+    <tr>
+      <td>APPD_NOZZLE_Node</td>
+      <td>Name of the Nozzle Node under which the metrics are recorded</td>
+      <td>Any string</td>
+      <td>appd-nozzle-node</td>
+    </tr>
+    <tr>
+        <td>APPD_SSL_ENABLED</td>
+        <td>Enable/Disable SSL to Controller</td>
+        <td>true / false</td>
+        <td>false</td>
+    </tr>
+    <tr>
+      <td>APPD_CONTROLLER_HOST</td>
+      <td>Hostname of the Appdynamics Controller</td>
+      <td>host.appd.com</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>APPD_CONTROLLER_PORT</td>
+      <td>Port on which Appdynamics Controller is listening</td>
+      <td>Any port number</td>
+      <td>8090</td>
+    </tr>
+    <tr>
+      <td>APPD_ACCOUNT</td>
+      <td>Account name for the above Controller</td>
+      <td>An Account name</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>APPD_ACCESS_KEY</td>
+      <td>Name of the Nozzle Node under which the metrics are recorded</td>
+      <td>Access Key</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>APPD_SINK</td>
+      <td>Sink to which the metrics are to be pushed.</td>
+      <td>stdout/Controller</td>
+      <td>Controller</td>
+    </tr>
+    <tr>
+      <td>APPD_SAMPLING_RATE</td>
+      <td>Polling Interval in secs to Firehose Nozzle.</td>
+      <td>number of seconds</td>
+      <td>2 seconds</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_UAA_URL</td>
+      <td>UAA API endpoint URL</td>
+      <td>Run cf curl /v2/info and record the UAA endpoint</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_TRAFFIC_CONTROLLER_URL</td>
+      <td>Doppler end point URL</td>
+      <td>Run cf curl /v2/info and record doppler api url</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_USERNAME</td>
+      <td>Name of the Nozzle Node under which the metrics are recorded</td>
+      <td>User name of account belonging to doppler.firehose group</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>NOZZLE_PASSWORD</td>
+      <td>Password for the above account</td>
+      <td>none</td>
+      <td>none</td>
+    </tr>
+</table>
 
-## <a id='log-in-to-pivotal-cli'></a> Log In to the Pivotal CLI
+## <a id='troubleshooting'></a> Troubleshooting
 
-1. Open a cf CLI or command-prompt window.
-
-1. Identify your Pivotal API endpoint and version. Enter the following command:
-  <pre class='terminal'>$ cf api</pre>
-  You should see the following output:
-  <pre class='terminal'>
-  api endpoint: https://api.my.pivotal.io
-  api version: 2.103.0
-  </pre>
-
-1. Log in to the Pivotal endpoint:
-  <pre class='terminal'>cf login</pre>
-
-1. Enter your email address and Pivotal password when prompted.
-
-
-## <a id='push-the-application'></a> Push the Application
-
-1. `cd` into the root directory of the application you want to deploy.
-
-1. Push the application and the [corresponding buildpack](using.html#buildpack-info):
-  <pre class='terminal'>cf push <app-name> -b <url-to-appdynamics-buildpack></pre>
-
-
-## <a id='bind-the-service-plan-to-the-application'></a> Bind the Service Plan to the Application
-
-1. Log in to Pivotal Apps Manager.
-
-1. Navigate to **Marketplace > AppDynamics**.
-
-1. Under **Service Plans**, select the service plan that you set up in Ops Manager. Click **Select This Plan**.
-  ![](./images/appdash-01-select-plan.png)
-
-1. Under **Instance Configuration**, specify the instance name and select the application of interest under **Bind to App**. Then click **Create**.
-  ![](./images/appdash-02-bind-to-app.png)
-  The Service tab confirms that the service is successfully bound to the application.
-  ![](./images/appdash-04-bind-success.png)
-
-
-## <a id='restage-the-application'></a> Restage the Application
-
-1. Run the following command:
-  <pre class='terminal'>cf bind-service <application-name></pre>
-
-1. Check the resulting output and verify that the app is successfully deployed. The last lines should confirm that the state of the app is running.
-  <pre class='terminal'>
-       state     since                  cpu    memory        disk           details
-  #0   running   2018-02-15T02:06:03Z   0.0%   55.3M of 1G   341.7M of 1G
-  </pre>
-
-
-## <a id='setting-proxy-properties'></a> Setting Proxy Properties
-
-If you are using a proxy server, the consumer application should specify the `http_proxy` or `https_proxy` as an environment variable for the application running on PCF to communicate with the proxy server. Do the following:
-
-1. Set the environment variable for the application and the Controller.
-   * For an HTTP proxy:
-    <pre class='terminal'>cf set-env <app-name> http_proxy http://user@password:myproxy....:8080/</pre>
-   * For an HTTPS proxy:
-    <pre class='terminal'>cf set-env <app-name> https_proxy https://user@password:myproxy....:8080/</pre>
-
-1. Restage the application:
-    <pre class='terminal'>cf restage <app-name></pre>
-
-1. Log in to the Controller web UI, navigate to the Metric Browser, and verify that the application is being detected and monitored.
-
-
-## <a id='buildpack-info'></a> Supported Buildpacks and Sample Workflows
-
-The following buildpacks are supported in this release. The [AppDynamics documentation for Pivotal] (https://docs.appdynamics.com/display/PCF) includes several step-by-step example workflows with sample applications.
-
-|  Language | Buildpack  | Sample Workflow |
-|---|---|---|
-| Java  |  https://github.com/cloudfoundry/java-buildpack | [Java Application Workflow](https://docs.appdynamics.com/display/PCF/Java+Application+in+PCF+-+Monitoring+Workflow) |
-| PHP  | https://github.com/cloudfoundry/php-buildpack  | [PHP Application workflow](https://docs.appdynamics.com/display/PCF/PHP+Application+in+PCF+-+Monitoring+Workflow) |
-|  Python |  https://github.com/cloudfoundry/python-buildpack#develop | [Python Application Workflow] (https://docs.appdynamics.com/display/PCF/Python+Application+in+PCF+-+Monitoring+Workflow) |
-|  NodeJS |  https://github.com/cloudfoundry/nodejs-buildpack|  |
+Follow the steps in the [extensions troubleshooting document](https://community.appdynamics.com/t5/Knowledge-Base/How-to-troubleshoot-missing-custom-metrics-or-extensions-metrics/ta-p/28695) in order to troubleshoot your issue. These are a set of common issues that you might face during the installation of the extension. If taking these steps does not solve your issue, follow the last step in the troubleshooting document to contact the support team.
