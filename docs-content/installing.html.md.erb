@@ -6,8 +6,7 @@ owner: Partners
 This topic describes how to install and configure Appdynamics Platform Metrics in Pivotal Cloud Foundry (PCF).
 ## <a id='overview-appd-nozzle'></a> Overview
 
-AppDynamics Nozzle aggregates and forwards logs and metrics from the Loggregator Firehose to the AppDynamics Controller. The Controller process that data and provides the performance metrics of the underlying infrastructure of apps running on PCF. You can view them in the Metric Browser corresponding to the Nozzle application.
-When you successfully configure AppDynamics Nozzle on PCF, a default application, appd-nozzle, is created on the AppDynamics Controller. The default tier created is appd-nozzle-tier and the node is appd-nozzle-node under which corresponding metrics are recorded.
+AppDynamics Nozzle aggregates and forwards logs and metrics from the Loggregator Firehose to the AppDynamics Controller. The Controller process that data and provides the performance metrics of the underlying infrastructure of apps running on PCF in the Metric Browser corresponding to the Nozzle application. When you successfully configure AppDynamics Nozzle on PCF, a default application, appd-nozzle, is created on the AppDynamics Controller. The default tier created is appd-nozzle-tier and the node is appd-nozzle-node under which corresponding metrics are recorded.
 
 ## <a id='before-you-start'></a> Before You Start
 
@@ -70,8 +69,10 @@ Although the nozzle application creates a default configuration on the AppDynami
 
 1. In the Installation Dashboard, click **Apply Changes** and wait for all the changes to be applied.
 
-### <a id='overide-nozzle-cf'></a>Using CF CLI
+### <a id='overide-nozzle-cf'></a>Overriding Default Nozzle Configuration
 
+
+The Nozzle is shipped to work with basic configuration input using Tile forms. However, most of the configuration can be overriden. 
 If the CF command line tool installed in your enviorment, you can override the Default Nozzle configuration by setting the environment variables and restaging the application:
 
 ```cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
