@@ -63,15 +63,18 @@ Do the following:
   * **Username for Reporting Custom Dashboard**: Username of an account with custom dashboard creation permissions.
   * **Password**: Password for the above Account.
 
+### <a id='overide-nozzle-ops-manager'></a> AppDynamics Application Configuration 
 
-## <a id='overide-nozzle'></a> Overriding Nozzle Configuration
-Although the nozzle application creates a default configuration on the AppDynamics Controller by itself, you can override it by changing the settings by using either the Ops Manager or by pushing the environment variables using the CF CLI tool.
-### <a id='overide-nozzle-ops-manager'></a> Using the Ops Manager
+1. This is Optional for 4.5.x Controllers. The Application, Tier, Node name are created as `appd-nozzle`, `appd-nozzle-tier` and `appd-nozzle-node` respectively on the fly.
+This can be overriden by setting the below configuration. Note that the Application, Tier need not be precreated here. Just enter the names you want the metrics under.
+
+1. However, for 4.4.x this is still mandatory. You HAVE to pre-create the Application / Tier on AppDynamics Controller and enter the configuration. Note that the tier must be `Go SDK` tier
+
 
 1. In the **Advanced Configuration (Optional for 4.5.x Controllers)** tab, specify the following settings and click **Save**.
    ![](./images/nozzle-adv-config.png)
   * **Nozzle Application Name**: Enter a name to identify the Nozzle application on the Controller.
-  * **Nozzle Tier Name**: Enter the tier name for the Nozzle application you defined previously.
+  * **Nozzle Tier Name**: Enter the tier name for the Nozzle application you defined previously. This MUST be Go SDK Tier
   * **Nozzle Tier ID**: Enter the component ID you identified previously.
   * **Nozzle Node Name**: Enter a name for the node that corresponds to the Application Name, such as **_app-name_-node**.
 
