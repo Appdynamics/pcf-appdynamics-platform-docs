@@ -9,8 +9,10 @@ owner: Partners
 The Nozzle is shipped to work with basic configuration input using Tile forms. However, most of the configuration can be overriden. 
 If the CF command line tool installed in your enviorment, you can override the Default Nozzle configuration by setting the environment variables and restaging the application:
 
-```cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
-   cf restage appdnozzle```
+<pre class='terminal'>
+cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
+cf restage appdnozzle-{version}
+</pre>
 
 The table below summarizes environment variables, their default and allowed values, and description.
 

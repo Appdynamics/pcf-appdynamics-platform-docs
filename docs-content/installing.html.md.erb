@@ -38,27 +38,29 @@ Do the following:
   * **UAA token_endpoint URL**: The authentication token endpoint URL of the User Account and Authentication Service (UAA) API.
   * **Doppler Traffic Controller URL**: The doppler firehose endpoint.
 
-    If cf is installed on the host, run the  cf command to `cf curl /v2/info`. The UAA token_endpoint and Doppler Traffic Controller URL are the value of `token_endpoint` and `doppler_logging_endpoint` respectively
+    
+    * Run the  cf command to `cf curl /v2/info`. The UAA token_endpoint and Doppler Traffic Controller URL are the values of `token_endpoint` and `doppler_logging_endpoint` respectively
 
-   ```
-      $ cf curl /v2/info
-      {
-        ...
-         "token_endpoint": "https://uaa.sys.pie-multi-az-blue.cfplatformeng.com",
-         ...
-         "doppler_logging_endpoint": "wss://doppler.sys.pie-multi-az-blue.cfplatformeng.com:443",
-      }
-   ```
+<pre class='terminal'>
+$ cf curl /v2/info
+{
+...
+"token_endpoint": "https://uaa.sys.pie-multi-az-blue.cfplatformeng.com",
+...
+"doppler_logging_endpoint": "wss://doppler.sys.pie-multi-az-blue.cfplatformeng.com:443",
+}
+</pre>
 
 
 
-
-  * **Username**: Username for a member account of the firehose.doppler Group. This is the authorized UAA user that AppDynamics Nozzle uses to access the Loggregator. For more information, see [How to Find Credentials](https://github.com/Appdynamics/appdynamics-firehose-nozzle#how-to-find-credentials).
+  * **Username**: Username for a member account belonging to **doppler.firehose** group. This is the authorized UAA user that AppDynamics Nozzle uses to access the Loggregator. For more information, see [How to Find Credentials](https://github.com/Appdynamics/appdynamics-firehose-nozzle#how-to-find-credentials).
   * **Password**: The password for the above account.
 
-    Do one of the following to get the credentials:
-      * If you have an account, log in to the OPS Manager and select the PAS tile. Navigate to credentials > UAA > Opentsdb Nozzle Credentials. Copy the username and password. CF environments usually ship the opentsdb-firehose-nozzle account which already belongs to the doppler.firehose group.
-      * If you don't have an account, create a new one in the doppler.firehose group with necessary permissions. For more information, see [UAA Client](https://github.com/cf-platform-eng/firehose-nozzle#option-2-uaa-client).
+
+    <b><i>Do one of the following to get the credentials</i></b>
+      * CF environments usually ship with **opentsdb-firehose-nozzle** account which already belongs to the doppler.firehose group. Use an existing account shipped with CloudFoundry, log in to the OPS Manager and select the PAS tile. Navigate to credentials > UAA > Opentsdb Nozzle Credentials. Copy the username and password.
+      * (or) Create a new one in the doppler.firehose group with necessary permissions. For more information, see [UAA Client](https://github.com/cf-platform-eng/firehose-nozzle#option-2-uaa-client).
+  
   * **Controller Account Name**: The name of the account in the AppDynamics Controller. Access the account name in the AppDynamics Controller UI on the Account tab under License.
   * **Account Access Key**: The access key for the above Controller account. Access the account key in the AppDynamics Controller UI on the Account tab under License.
   * **Controller Host**: Hostname of the AppDynamics Controller.
