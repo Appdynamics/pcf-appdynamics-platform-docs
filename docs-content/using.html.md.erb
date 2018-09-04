@@ -6,15 +6,15 @@ owner: Partners
 ## <a id='overide-nozzle-cf'></a>Overriding Default Nozzle Configuration
 
 
-The Nozzle is shipped to work with basic configuration input using Tile forms. However, most of the configuration can be overriden. 
+The Nozzle is shipped to work with basic configuration input using Tile forms. However, most of the configuration can be overriden.
 If the CF command line tool installed in your enviorment, you can override the Default Nozzle configuration by setting the environment variables and restaging the application:
 
 <pre class='terminal'>
-cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
-cf restage appdnozzle-{version}
+$ cf set-env appdnozzle <ENVNAME> <NEW ENV VALUE>
+$ cf restage appdnozzle-{version}
 </pre>
 
-The table below summarizes environment variables, their default and allowed values, and description.
+The table below summarizes the environment variables, their default and allowed values, and the description.
 
 <table class="nice">
     <th>Environment Variable</th>
@@ -23,7 +23,7 @@ The table below summarizes environment variables, their default and allowed valu
     <th>Default</th>
     <tr>
         <td>APPD_NOZZLE_APP</td>
-        <td>Name of the Nozzle Application under which the metrics are recorded.</td>
+        <td>Name of the Nozzle Application under which the metrics are recorded</td>
         <td>Any string</td>
         <td>appd-nozzle</td>
     </tr>
@@ -71,13 +71,13 @@ The table below summarizes environment variables, their default and allowed valu
     </tr>
     <tr>
       <td>APPD_SINK</td>
-      <td>Sink to which the metrics are to be pushed.</td>
+      <td>Sink to which the metrics are to be pushed</td>
       <td>stdout/Controller</td>
       <td>Controller</td>
     </tr>
     <tr>
       <td>APPD_SAMPLING_RATE</td>
-      <td>Polling Interval in secs to Firehose Nozzle.</td>
+      <td>Polling Interval in secs to Firehose Nozzle</td>
       <td>number of seconds</td>
       <td>2 seconds</td>
     </tr>
